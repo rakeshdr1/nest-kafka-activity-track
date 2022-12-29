@@ -44,6 +44,15 @@
       "compilerOptions": {
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
       }
+    },
+    "constants": {
+      "type": "library",
+      "root": "libs/constants",
+      "entryFile": "index",
+      "sourceRoot": "libs/constants/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/constants/tsconfig.lib.json"
+      }
     }
   }
 }

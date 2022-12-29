@@ -1,8 +1,27 @@
 import { NestFactory } from '@nestjs/core';
-import { AuthServiceModule } from './auth-service.module';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+
+import { ExceptionFilter } from '@shared/filters/exception.filters';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AuthServiceModule);
-  await app.listen(3000);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    AppModule,
+    {
+      transport: Transport.KAFKA,
+      options: {
+        client: {
+          brokers: ['localhost:9092'],
+        },
+        consumer: {
+          groupId: 'auth-consumer',
+        },
+      },
+    },
+  );
+
+  app.useGlobalFilters(new ExceptionFilter());
+
+  await app.listen();
 }
 bootstrap();

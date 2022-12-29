@@ -26,12 +26,15 @@ services:
       KAFKA_RESTART_ATTEMPTS: "10"
       KAFKA_RESTART_DELAY: "5"
       ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: "0"
-  db:
-    image:  postgres
-    restart: always
-    ports:
-      - "5433:5432"
+  mongodb_container:
+    image: mongo:latest
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: pass123
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data_container:/data/db
+volumes:
+  mongodb_data_container:
  
