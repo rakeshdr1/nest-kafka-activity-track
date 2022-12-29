@@ -3,6 +3,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import * as path from 'path';
+import { AuthModule } from './modules/auth/auth.module';
+import { UserModule } from './modules/user/user.module';
 
 @Module({
   imports: [
@@ -16,6 +18,8 @@ import * as path from 'path';
       }),
       inject: [ConfigService],
     }),
+    UserModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
