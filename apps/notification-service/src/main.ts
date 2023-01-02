@@ -14,7 +14,7 @@ async function bootstrap() {
           brokers: ['localhost:9092'],
         },
         consumer: {
-          groupId: 'auth-consumer',
+          groupId: 'notification-consumer',
         },
       },
     },
