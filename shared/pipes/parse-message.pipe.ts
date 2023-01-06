@@ -6,12 +6,12 @@ import {
 
 export class ParseMessagePipe implements PipeTransform {
   transform(message: any, metadata: ArgumentMetadata): any {
-    // const { value } = message;
+    const { value } = message;
 
-    // if (!value) {
-    //   throw new BadRequestException('Invalid message!');
-    // }
+    if (!value) {
+      throw new BadRequestException('Invalid message!');
+    }
 
-    return message;
+    return value;
   }
 }
