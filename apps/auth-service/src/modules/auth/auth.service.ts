@@ -5,11 +5,11 @@ import { RpcException } from '@nestjs/microservices';
 
 import * as bcrypt from 'bcryptjs';
 
-import { TokensResponse } from '@shared/dto/token-response.dto';
+import { TokensResponse } from '@shared/dto/auth/token-response.dto';
 import { UserService } from '../user/user.service';
 import { User } from '@shared/schemas/user.schema';
-import { SignInRequest } from '@shared/dto/sign-in.dto';
-import { SignUpRequest } from '@shared/dto/sign-up.dto';
+import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
+import { SignUpRequest } from '@shared/dto/auth/sign-up.dto';
 
 @Injectable()
 export class AuthService {

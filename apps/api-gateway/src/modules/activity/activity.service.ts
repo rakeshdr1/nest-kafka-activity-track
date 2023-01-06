@@ -5,7 +5,8 @@ import { firstValueFrom } from 'rxjs';
 import { CONSTANTS } from '@shared/constants';
 import { CreateActivityRequest } from '@shared/dto/activity/create-activity.dto';
 import { UpdateActivityRequest } from '@shared/dto/activity/update-activity.dto';
-import { Activity } from '@shared/schemas/activity.schema';
+import HttpCreatedResponse from '@shared/http/created-response';
+import HttpOkResponse from '@shared/http/ok-response';
 
 @Injectable()
 export class ActivityService {
@@ -14,7 +15,7 @@ export class ActivityService {
     private readonly activityService: ClientKafka,
   ) {}
 
-  async findAllByUser(userId: string): Promise<Activity[]> {
+  async findAllByUser(userId: string) {
     const activities = await firstValueFrom(
       this.activityService.send(
         CONSTANTS.KAFKA_TOPICS.ACTIVITY.FIND_ALL,
@@ -22,34 +23,41 @@ export class ActivityService {
       ),
     );
 
-    return activities;
+    return new HttpOkResponse(activities);
   }
 
-  async create(data: CreateActivityRequest): Promise<Activity> {
-    const activity = await firstValueFrom(
+  async create(data: CreateActivityRequest) {
+    this.activityService.emit(
+      CONSTANTS.KAFKA_TOPICS.ACTIVITY.CREATE,
+      JSON.stringify(data),
+    );
+
+    return new HttpCreatedResponse();
+  }
+
+  async update(data: UpdateActivityRequest) {
+    await firstValueFrom(
       this.activityService.send(
-        CONSTANTS.KAFKA_TOPICS.ACTIVITY.CREATE,
-        JSON.stringify(data),
+        CONSTANTS.KAFKA_TOPICS.ACTIVITY.FIND_ONE,
+        data.id,
       ),
     );
 
-    return activity;
-  }
-
-  async update(data: UpdateActivityRequest): Promise<Activity> {
-    const activity = await firstValueFrom(
-      this.activityService.send(
-        CONSTANTS.KAFKA_TOPICS.ACTIVITY.UPDATE,
-        JSON.stringify(data),
-      ),
+    this.activityService.emit(
+      CONSTANTS.KAFKA_TOPICS.ACTIVITY.UPDATE,
+      JSON.stringify(data),
     );
 
-    return activity;
+    return new HttpOkResponse();
   }
 
   async remove(id: string) {
     await firstValueFrom(
-      this.activityService.send(CONSTANTS.KAFKA_TOPICS.ACTIVITY.REMOVE, id),
+      this.activityService.send(CONSTANTS.KAFKA_TOPICS.ACTIVITY.FIND_ONE, id),
     );
+
+    this.activityService.emit(CONSTANTS.KAFKA_TOPICS.ACTIVITY.REMOVE, id);
+
+    return new HttpOkResponse();
   }
 }

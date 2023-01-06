@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RpcException } from '@nestjs/microservices';
 import { InjectModel } from '@nestjs/mongoose';
-import { SignInRequest } from '@shared/dto/sign-in.dto';
+import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
 import { User } from '@shared/schemas/user.schema';
 import { Model } from 'mongoose';
 

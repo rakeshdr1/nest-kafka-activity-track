@@ -8,6 +8,7 @@ class Constants {
     },
     ACTIVITY: {
       FIND_ALL: 'find-all-activity',
+      FIND_ONE: 'find-one-activity',
       CREATE: 'create-activity',
       UPDATE: 'update-activity',
       REMOVE: 'remove-activity',

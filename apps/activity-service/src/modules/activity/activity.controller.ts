@@ -1,5 +1,5 @@
 import { Controller } from '@nestjs/common';
-import { MessagePattern, Payload } from '@nestjs/microservices';
+import { EventPattern, MessagePattern, Payload } from '@nestjs/microservices';
 
 import { CONSTANTS } from '@shared/constants';
 import { CreateActivityRequest } from '@shared/dto/activity/create-activity.dto';
@@ -11,9 +11,9 @@ import { ActivityService } from './activity.service';
 export class ActivityController {
   constructor(private readonly activityService: ActivityService) {}
 
-  @MessagePattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.CREATE)
+  @EventPattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.CREATE)
   async create(@Payload(new ParseMessagePipe()) data: CreateActivityRequest) {
-    return this.activityService.create(data);
+    this.activityService.create(data);
   }
 
   @MessagePattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.FIND_ALL)
@@ -21,12 +21,17 @@ export class ActivityController {
     return this.activityService.findAllByUser(userId);
   }
 
-  @MessagePattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.UPDATE)
+  @MessagePattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.FIND_ONE)
+  async findById(@Payload(new ParseMessagePipe()) id: string) {
+    return this.activityService.findById(id);
+  }
+
+  @EventPattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.UPDATE)
   async update(@Payload(new ParseMessagePipe()) data: UpdateActivityRequest) {
     return JSON.stringify(await this.activityService.update(data));
   }
 
-  @MessagePattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.REMOVE)
+  @EventPattern(CONSTANTS.KAFKA_TOPICS.ACTIVITY.REMOVE)
   async remove(@Payload(new ParseMessagePipe()) id: string) {
     return JSON.stringify(await this.activityService.remove(id));
   }
