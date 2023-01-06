@@ -1,22 +1,22 @@
 import {
-  BadRequestException,
   Body,
   Controller,
   Inject,
   OnModuleInit,
   Post,
-  Req,
   Res,
 } from '@nestjs/common';
 import { ClientKafka } from '@nestjs/microservices';
+import { ApiTags } from '@nestjs/swagger';
 
 import { CONSTANTS } from '@shared/constants';
-import { SignInRequest } from '@shared/dto/sign-in.dto';
-import { SignUpRequest } from '@shared/dto/sign-up.dto';
+import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
+import { SignUpRequest } from '@shared/dto/auth/sign-up.dto';
 
 import { AuthService } from './auth.service';
 
 @Controller('auth')
+@ApiTags('Auth')
 export class AuthController implements OnModuleInit {
   constructor(
     @Inject('AUTH-SERVICE') private readonly authClient: ClientKafka,

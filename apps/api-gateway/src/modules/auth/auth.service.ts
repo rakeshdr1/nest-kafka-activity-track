@@ -3,9 +3,9 @@ import { ClientKafka } from '@nestjs/microservices';
 import { firstValueFrom } from 'rxjs';
 
 import { CONSTANTS } from '@shared/constants';
-import { SignInRequest } from '@shared/dto/sign-in.dto';
-import { SignUpRequest } from '@shared/dto/sign-up.dto';
-import { TokensResponse } from '@shared/dto/token-response.dto';
+import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
+import { SignUpRequest } from '@shared/dto/auth/sign-up.dto';
+import { TokensResponse } from '@shared/dto/auth/token-response.dto';
 
 @Injectable()
 export class AuthService {
