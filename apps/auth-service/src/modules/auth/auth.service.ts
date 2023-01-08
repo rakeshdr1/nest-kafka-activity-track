@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { RpcException } from '@nestjs/microservices';
+import { ClientKafka, RpcException } from '@nestjs/microservices';
 
 import * as bcrypt from 'bcryptjs';
 
@@ -10,6 +10,7 @@ import { UserService } from '../user/user.service';
 import { User } from '@shared/schemas/user.schema';
 import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
 import { SignUpRequest } from '@shared/dto/auth/sign-up.dto';
+import { CONSTANTS } from '@shared/constants';
 
 @Injectable()
 export class AuthService {
@@ -17,6 +18,8 @@ export class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    @Inject('NOTIFICATION_SERVICE')
+    private readonly notificationClient: ClientKafka,
   ) {}
 
   async signUp(data: SignUpRequest): Promise<TokensResponse> {
@@ -29,6 +32,11 @@ export class AuthService {
       ...data,
       password: hashedPassword,
     });
+
+    this.notificationClient.emit(
+      CONSTANTS.KAFKA_TOPICS.USER.USER_CREATED,
+      JSON.stringify(data),
+    );
 
     const tokens = this.generateTokens(user.id);
 

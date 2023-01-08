@@ -6,6 +6,9 @@ class Constants {
       VERIFY_TOKEN: 'verify-token',
       UPDATE_TOKEN: 'update-token',
     },
+    USER: {
+      USER_CREATED: 'user-created',
+    },
     ACTIVITY: {
       FIND_ALL: 'find-all-activity',
       FIND_ONE: 'find-one-activity',

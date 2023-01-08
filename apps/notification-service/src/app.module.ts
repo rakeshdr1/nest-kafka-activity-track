@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { MailModule } from './mail/mail.module';
 
 import * as path from 'path';
 
@@ -19,6 +20,7 @@ import * as path from 'path';
       }),
       inject: [ConfigService],
     }),
+    MailModule,
   ],
 })
 export class AppModule {}
