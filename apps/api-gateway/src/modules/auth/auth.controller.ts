@@ -12,6 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { CONSTANTS } from '@shared/constants';
 import { SignInRequest } from '@shared/dto/auth/sign-in.dto';
 import { SignUpRequest } from '@shared/dto/auth/sign-up.dto';
+import HttpOkResponse from '@shared/http/ok-response';
 
 import { AuthService } from './auth.service';
 
@@ -36,7 +37,7 @@ export class AuthController implements OnModuleInit {
   ) {
     const { accessToken, refreshToken } = await this.authService.signUp(data);
 
-    return { accessToken, refreshToken };
+    return new HttpOkResponse({ accessToken, refreshToken });
   }
 
   @Post('signIn')
@@ -46,17 +47,6 @@ export class AuthController implements OnModuleInit {
   ) {
     const { accessToken, refreshToken } = await this.authService.signIn(data);
 
-    return { accessToken, refreshToken };
+    return new HttpOkResponse({ accessToken, refreshToken });
   }
-
-  //   @Post('update')
-  //   async updateToken(@Req() req: Request) {
-  //     const { refreshToken } = req.cookies;
-
-  //     if (!refreshToken) throw new BadRequestException('No refreshToken');
-
-  //     const accessToken = await this.authService.updateToken(refreshToken);
-
-  //     return { accessToken };
-  //   }
 }
